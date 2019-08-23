@@ -1,0 +1,51 @@
+{
+    "fieldGroup": {
+		"legend": "Checkbox Group",
+        "fieldList": {
+            "items": [
+                {
+                    "field": {
+                        "input": {
+                            "type": "checkbox",
+                            "id": "checkbox-1",
+                            "name": "checkbox",
+                            "cssClass": "input--checkbox"
+                        },
+                        "label": {
+                            "id": "checkbox-1",
+                            "content": "Checkbox 1"
+                        }					
+                    }
+                },
+                {
+                    "field": {
+                        "input": {
+                            "type": "checkbox",
+                            "id": "checkbox-2",
+                            "name": "checkbox",
+                            "cssClass": "input--checkbox"
+                        },
+                        "label": {
+                            "id": "checkbox-2",
+                            "content": "Checkbox 2"
+                        }
+                    }
+                },
+                {
+                    "field": {
+                        "input": {
+                            "type": "checkbox",
+                            "id": "checkbox-3",
+                            "name": "checkbox",
+                            "cssClass": "input--checkbox"
+                        },
+                        "label": {
+                            "id": "checkbox-3",
+                            "content": "Checkbox 3"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

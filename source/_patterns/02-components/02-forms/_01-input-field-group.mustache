@@ -1,0 +1,20 @@
+{{# fieldGroup }}
+	<fieldset class="field-group{{# styleModifier }} {{ styleModifier }}{{/ styleModifier }}">
+		<legend class="field-group__label">{{ legend }}</legend>
+		{{# fieldList }}
+			<ul class="field-list">
+			{{# items}}
+				<li class="field field-list__item">
+					{{#field}}
+						{{> basics-input }}
+						{{> basics-label }}
+					{{/field}}
+				</li>
+			{{/ items }}
+			</ul>
+		{{/ fieldList }}
+		{{# isInvalid }}
+			{{> basics-field-error-message }}
+		{{/ isInvalid }}
+	</fieldset>
+{{/ fieldGroup }}

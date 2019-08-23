@@ -1,0 +1,16 @@
+body:before {
+	content: "small";
+	display: none;
+}
+
+@media (--medium) {
+	body:before {
+		content: "medium";
+	}
+}
+
+@media (--large) {
+	body:before {
+		content: "large";
+	}
+}

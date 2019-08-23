@@ -1,0 +1,29 @@
+.button {
+
+	&:hover, &:focus {
+
+	}
+
+	&:active {
+
+	}
+
+	&:disabled {
+		
+	}
+}
+
+.button--alt {
+
+	&:hover, &:focus {
+
+	}
+
+	&:active {
+
+	}
+
+	&:disabled {
+		
+	}
+}

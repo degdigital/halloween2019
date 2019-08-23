@@ -1,0 +1,9 @@
+{{# field }}
+	<div class="field{{# styleModifier }} {{ styleModifier }}{{/ styleModifier }}">
+		{{> basics-label }}
+		{{> basics-text-area }}
+		{{# isInvalid }}
+			{{> basics-field-error-message }}
+		{{/ isInvalid }}
+	</div>
+{{/ field }}

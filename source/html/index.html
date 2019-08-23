@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>React App</title>
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+		<link rel="stylesheet" href="/css/global.css">		
+
+	</head>
+	<body>
+		
+		<div id="app"></div>
+
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+        <script type="module" src="js/index.js"></script>		
+		<script nomodule src="js/systemjs/s.min.js"></script>
+		<script nomodule>
+			System.import('/js/nomodule/index.js');
+		</script>
+    </body>
+</html>

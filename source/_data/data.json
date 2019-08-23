@@ -1,0 +1,85 @@
+{
+	"title" : "DEG UI Project",
+	"mainId" : "main-content",
+	"primaryColors": [
+		{
+			"code": "#000000",
+			"name": "Black"
+		},
+		{
+			"code": "#FFFFFF",
+			"name": "White"
+		}
+	],
+	"secondaryColors": [
+		{
+			"code": "#999999",
+			"name": "Gray"
+		}
+	],
+	"logo" : {
+		"url": "",
+		"alt": "Logo Alt"
+	},
+	"button": {
+		"content": "Button",
+		"type": "button"
+	},
+	"video": {
+		"videoID": "5le9sYdYkM"
+	},
+	"label": {
+		"id": "input",
+		"content": "Label"
+	},
+	"input": {
+		"id": "input",
+		"type": "text",
+		"placeholder": "Placeholder Text",
+		"attributes": []
+	},
+	"textarea": {
+		"id": "textarea",
+		"placeholder": "Placeholder Text",
+		"attributes": []
+	},
+	"select": {
+		"id": "select",
+		"options": [
+			{
+				"label": "Option 1",
+				"value": "1"
+			},
+			{
+				"label": "Option 2",
+				"value": "2"
+			},
+			{
+				"label": "Option 2",
+				"value": "3"
+			}
+		]
+	},
+	"field": {},
+	"primaryNav": [
+		{
+			"label": "Primary Nav Item 1",
+			"url": ""
+		},
+		{
+			"label": "Primary Nav Item 2",
+			"url": ""
+		},
+		{
+			"label": "Primary Nav Item 3",
+			"url": ""
+		},
+		{
+			"label": "Primary Nav Item 4",
+			"url": ""
+		}
+	],
+	"description" : "So, setting about it as methodically as men might smoke out a wasps' nest, the Martians spread this strange stifling vapour over the Londonward country. The horns of the crescent slowly moved apart, until at last they formed a line from Hanwell to Coombe and Malden. All night through their destructive tubes advanced.",
+	"blockquote": "A block quotation (also known as a long quotation or extract) is a quotation in a written document, that is set off from the main text as a paragraph, or block of text, and typically distinguished visually using indentation and a different typeface or smaller size quotation.",
+	"url" : "#"
+}

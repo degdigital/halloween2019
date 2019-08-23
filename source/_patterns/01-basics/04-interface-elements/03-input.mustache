@@ -1,0 +1,12 @@
+{{# input }}
+	<input 
+		class="input{{# styleModifier }} {{ styleModifier }}{{/ styleModifier }}{{# cssClass }} {{ cssClass }}{{/ cssClass }}{{# isInvalid }} input--invalid{{/ isInvalid }}" 
+		id="{{ id }}"
+		name="{{# name }}{{ name }}{{/ name }}{{^ name }}{{ id }}{{/ name }}" 
+		type="{{ type }}"
+		{{# placeholder}}placeholder="{{ placeholder }}"{{/ placeholder }} 
+		value="{{ value }}"
+		{{# isRequired }}required aria-required="true"{{/ isRequired}}
+		{{# isDisabled }}disabled{{/ isDisabled }}
+		{{#attributes}}{{name}}="{{value}}"{{/attributes}} />
+{{/ input }}

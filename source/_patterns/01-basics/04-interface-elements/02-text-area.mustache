@@ -1,0 +1,11 @@
+{{# textarea }}
+	<textarea 
+		class="input input--textarea{{# styleModifier }} {{ styleModifier }}{{/ styleModifier }}{{# isInvalid }} input--invalid{{/ isInvalid }}" 
+		id="{{ id }}" 
+		name="{{# name }}{{ name }}{{/ name }}{{^ name }}{{ id }}{{/ name }}" 
+		{{# placeholder }}placeholder="{{ placeholder }}"{{/ placeholder }}
+		{{# isRequired }}required aria-required="true"{{/ isRequired}}
+		{{# isDisabled }}disabled{{/ isDisabled }}
+		{{#attributes}}{{name}}="{{value}}"{{/attributes}}>{{ value }}
+	</textarea>
+{{/ textarea }}

@@ -1,0 +1,51 @@
+{
+    "fieldGroup": {
+		"legend": "Radio Button Group",
+        "fieldList": {
+            "items": [
+                {
+                    "field": {
+                        "input": {
+                            "type": "radio",
+                            "id": "radio-1",
+                            "name": "radio",
+                            "cssClass": "input--radio"
+                        },
+                        "label": {
+                            "id": "radio-1",
+                            "content": "Radio Button 1"
+                        }					
+                    }
+                },
+                {
+                    "field": {
+                        "input": {
+                            "type": "radio",
+                            "id": "radio-2",
+                            "name": "radio",
+                            "cssClass": "input--radio"
+                        },
+                        "label": {
+                            "id": "radio-2",
+                            "content": "Radio Button 2"
+                        }
+                    }
+                },
+                {
+                    "field": {
+                        "input": {
+                            "type": "radio",
+                            "id": "radio-3",
+                            "name": "radio",
+                            "cssClass": "input--radio"
+                        },
+                        "label": {
+                            "id": "radio-3",
+                            "content": "Radio Button 3"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}
