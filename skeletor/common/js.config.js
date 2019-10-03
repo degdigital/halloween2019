@@ -64,10 +64,24 @@ function rollupPlugins(isModern, minify) {
                     'Children', 
                     'createElement', 
                     'cloneElement', 
-                    'createContext'
+                    'createContext',
+                    'useReducer',
+                    'useEffect',
+                    'useState',
+                    'useRef'
                 ],
                 'node_modules/react-dom/index.js': [
                     'render'
+                ],
+                'node_modules/idb/build/idb.js': [
+                    'openDb'
+                ],
+                'node_modules/react-is/index.js': [
+                    'isValidElementType'
+                ],
+                'node_modules/firebase/dist/index.cjs.js': [
+                    'initializeApp',
+                    'firestore'
                 ]
             }
         })
