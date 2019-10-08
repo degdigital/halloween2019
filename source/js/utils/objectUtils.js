@@ -1,6 +1,6 @@
-const convertObjectToArray = (obj = null) => {
+const convertObjectToArray = (obj) => {
     if (!obj) {
-        return null;
+        return;
     }
     return Object.keys(obj).map(key => ({
         ...obj[key],

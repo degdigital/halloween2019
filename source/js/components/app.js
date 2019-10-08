@@ -1,30 +1,27 @@
 import React from 'react';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useObjectVal } from 'react-firebase-hooks/database';
-import firebase from '../config/firebase.js';
-import PrivateRoute from '../utils/privateRoute.js';
-import Login from './auth/login.js';
-import Logout from './auth/logout.js';
-import Register from './auth/register.js';
-import Admin from './admin.js';
-import Home from './home.js';
-import PlayerMap from './playerMap.js';
-import Battle from './battle.js';
-import Loading from './auth/loading.js';
-import Error from './auth/error.js';
+import { getUser, getPlayers, getPlayer, getBattleInvolvingPlayer, getDbVal } from '../services';
+import { PrivateRoute, Login, Logout, Register, Loading, Error, Admin, Home, GameLanding, BattleLanding } from '../routes';
 
 const App = () => {
 
-    const [user, initialising, error] = useAuthState(firebase.auth());
-    const [gameIsActive, loading] = useObjectVal(firebase.database().ref(`gameIsActive`));
+    const [user, userLoading, userError] = getUser();
+    const [players, playersLoading, playersError] = getPlayers();
+    const [gameIsActive, gameIsActiveLoading, gameIsActiveError] = getDbVal('gameIsActive');
+    const [battles, battlesLoading, battlesError] = getDbVal('battles');
+    const [battleInvites, battleInvitesLoading, battleInvitesError] = getDbVal('battleInvites');
+    const [
+        gameIsAwaitingPlayers, 
+        gameIsAwaitingPlayersLoading, 
+        gameIsAwaitingPlayersError
+    ] = getDbVal('gameIsAwaitingPlayers');
 
-    if (initialising || loading) {
+    if (userLoading || playersLoading || gameIsActiveLoading || gameIsAwaitingPlayersLoading || battleInvitesLoading || battlesLoading) {
         return (
             <Loading />
         );
     }
-    if (error) {
+    if (userError || playersError || gameIsActiveError || gameIsAwaitingPlayersError || battleInvitesError || battlesError) {
         return (
             <Error />
         );
@@ -43,18 +40,33 @@ const App = () => {
             <p>No game active at this time. Check back soon.</p>
         );
     }
-    if (user) {
+    if (user && players) {
+        const propsToPushToAll = {
+            player: getPlayer(players, user.uid),
+            players,
+            battle: getBattleInvolvingPlayer(battles, battleInvites, user.uid),
+            gameIsAwaitingPlayers
+        };
+        console.log(propsToPushToAll);
         return (
             <Router>
                 <Link to="/logout">Logout</Link>
                 <PrivateRoute 
                     exact 
                     path="/" 
-                    component={PlayerMap} 
+                    component={GameLanding} 
+                    {...propsToPushToAll}
+                />
+                <PrivateRoute 
+                    path="/battle" 
+                    component={BattleLanding}
+                    {...propsToPushToAll} 
+                />
+                <PrivateRoute 
+                    path="/logout" 
+                    component={Logout} 
                     user={user}
                 />
-                <PrivateRoute path="/battle" component={Battle} user={user} />
-                <PrivateRoute path="/logout" component={Logout} user={user} />
             </Router>
         );
     }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import firebase from '../config/firebase.js';
+import gameConfig from '../config/gameConfig.js';
 
 const db = firebase.database();
 const messages = {
@@ -27,24 +28,27 @@ const Admin = () => {
         return num <= .2 ? 'zombie' : 'survivor';
     };
 
-    const resetPlayers = async () => {
-        if (window.confirm(messages.resetPlayers)) {
+    const enableGame = async (shouldEnable = true) => {
+        if (window.confirm(messages.disableGame.replace('[disableState]', shouldEnable ? 'enable' : 'disable'))) {
             setActionIsInProgress(true);
-            const updates = {};
-            const playersSnapshot = await db.ref('players').once('value');
-            playersSnapshot.forEach(playerSnapshot => {
-                updates[`/players/${playerSnapshot.key}`] = {
-                    ...playerSnapshot.val(),
-                    isPlaying: false,
-                    isBattling: false,
-                    currentTeam: null
-                };
+            await db.ref().update({
+                gameIsActive: shouldEnable
             });
-            await db.ref().update(updates);
-            setMessage(messages.playersReset);
+            setMessage(shouldEnable ? messages.gameEnabled : messages.gameDisabled);
             setActionIsInProgress(false);
         }
-    }
+    };
+
+    const openGameAccess = async (shouldEnable = true) => { 
+        if (window.confirm(messages.disableGame.replace('[disableState]', shouldEnable ? 'enable' : 'disable'))) {
+            setActionIsInProgress(true);
+            await db.ref().update({
+                gameIsAwaitingPlayers: shouldEnable
+            });
+            setMessage(shouldEnable ? messages.gameEnabled : messages.gameDisabled);
+            setActionIsInProgress(false);
+        }
+    };
 
     const startGame = async () => { 
         if (window.confirm(messages.startNewGame)) {
@@ -56,10 +60,12 @@ const Admin = () => {
             };
             const playersSnapshot = await db.ref('players').once('value');
             playersSnapshot.forEach(playerSnapshot => {
+                const team = assignToTeam();
                 updates[`/players/${playerSnapshot.key}`] = {
                     ...playerSnapshot.val(),
                     isBattling: false,
-                    currentTeam: assignToTeam()
+                    lives: gameConfig.lives[team],
+                    team
                 };
             });
             await db.ref().update(updates);
@@ -69,22 +75,37 @@ const Admin = () => {
         }
     };
 
-    const enableGame = async (shouldEnable = true) => {
-        if (window.confirm(messages.disableGame.replace('[disableState]', shouldEnable ? 'enable' : 'disable'))) {
+    const resetPlayers = async () => {
+        if (window.confirm(messages.resetPlayers)) {
             setActionIsInProgress(true);
-            await db.ref('gameIsActive').set(shouldEnable);
-            setMessage(shouldEnable ? messages.gameEnabled : messages.gameDisabled);
+            const updates = {};
+            const playersSnapshot = await db.ref('players').once('value');
+            playersSnapshot.forEach(playerSnapshot => {
+                updates[`/players/${playerSnapshot.key}`] = {
+                    ...playerSnapshot.val(),
+                    isPlaying: false,
+                    isBattling: false,
+                    lives: null,
+                    team: null
+                };
+            });
+            await db.ref().update(updates);
+            setMessage(messages.playersReset);
             setActionIsInProgress(false);
         }
-    }
+    };
 
     return (
         <div>
             <h1>Admin</h1>
-            <button type="button" onClick={startGame} disabled={actionIsInProgress}>Start New Game</button><br />
-            <button type="button" onClick={resetPlayers} disabled={actionIsInProgress}>Reset Players</button><br />
-            <button type="button" onClick={() => enableGame(false)} disabled={actionIsInProgress}>Disable Game</button><br />
             <button type="button" onClick={() => enableGame(true)} disabled={actionIsInProgress}>Enable Game</button><br />
+            <button type="button" onClick={() => enableGame(false)} disabled={actionIsInProgress}>Disable Game</button><br /><br />
+
+            <button type="button" onClick={() => openGameAccess(true)} disabled={actionIsInProgress}>Open Game to Player Opt-Ins</button><br />
+            <button type="button" onClick={() => openGameAccess(false)} disabled={actionIsInProgress}>Close Game to Player Opt-Ins</button><br />
+            <button type="button" onClick={resetPlayers} disabled={actionIsInProgress}>Reset Players</button><br /><br />
+            
+            <button type="button" onClick={startGame} disabled={actionIsInProgress}>Start New Game</button><br />
             {message && <p>{message}</p>}
         </div>
     )

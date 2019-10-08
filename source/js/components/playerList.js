@@ -1,29 +1,32 @@
 import React from 'react';
 import { engagePlayerInBattle } from '../services/battleService.js';
 
-const PlayerList = ({history, currentPlayer, players}) => {
+const PlayerList = ({history, player, players}) => {
 
-    const handleButtonClick = async (id, currentPlayerId) => {
-        await engagePlayerInBattle(id, currentPlayerId);
+    const handleButtonClick = async (id) => {
+        await engagePlayerInBattle(id, player.id);
         history.push(`/battle`);
     };
 
-    const isDisabled = (opponentId, opponentTeam, currentPlayer, isBattling) => {
-        return !currentPlayer ||
-            opponentId === currentPlayer.id || 
+    const filterDeadAndInactivePlayers = players => players.filter(player => player.lives > 0 && player.isPlaying === true);
+
+    const isDisabled = (opponentId, opponentTeam, isBattling) => {
+        return !player || 
+            opponentId === player.id || 
             isBattling === true || 
-            currentPlayer.currentTeam === opponentTeam;
+            player.team === opponentTeam || 
+            player.lives <= 0;
     };
 
     return players ? (
         <ul>
-            {players.map(({id, displayName, currentTeam, isBattling}) => {
+            {filterDeadAndInactivePlayers(players).map(({id, displayName, team, isBattling, lives}) => {
                 return (
                     <li key={id}>
                         <button 
                             type="button" 
-                            disabled={isDisabled(id, currentTeam, currentPlayer, isBattling)}
-                            onClick={() => handleButtonClick(id, currentPlayer.id)}>{displayName}{currentPlayer && currentPlayer.id === id ? ' - You' : null} ({currentTeam}){isBattling ? ' - Battling' : ''}
+                            disabled={isDisabled(id, team, isBattling)}
+                            onClick={() => handleButtonClick(id)}>{displayName}{player && player.id === id ? ' - You' : null} ({team}){isBattling ? ' - Battling' : ''}{lives ? ' - ' + lives + ' lives remaining' : null}
                         </button>
                     </li>
                 )

@@ -19,4 +19,4 @@ export {
     register,
     login,
     logout
-};
+}
