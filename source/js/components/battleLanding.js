@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import CountdownTimer from './countdownTimer.js';
+import useInterval from '../hooks/useInterval.js';
 import Battle from './battle.js';
+import BattleResults from './battleResults.js';
 import { joinBattle, abortBattle, getOpponentObject } from '../services';
 
 const BattleLanding = ({battle, players, player}) => {
@@ -13,6 +14,22 @@ const BattleLanding = ({battle, players, player}) => {
         join();
     }, []);
 
+    const expirationTime = battle && battle.battleWaitExpirationTime ? battle.battleWaitExpirationTime : 0;
+    const remainingTime = Math.ceil((expirationTime - Date.now()) / 1000);
+    const [countdown, setCountdown] = useState(remainingTime);
+
+    useInterval(() => {
+        if ((battle.initiator === player.id) && countdown > 0) {
+            setCountdown(countdown - 1);
+        } else {
+            abortBattle({
+                battleId: battle.id,
+                initiatorId: battle.initiator,
+                opponent
+            })
+        }
+    }, 1000);
+
     if (!battle) {
         return <Redirect to={{
             pathname: '/'
@@ -23,7 +40,7 @@ const BattleLanding = ({battle, players, player}) => {
 
     if (battle.winner) {
         return (
-            <BattleResults battle={battle} player={player} opponent={opponent} />
+            <BattleResults battle={battle} player={player} />
         )
     }
 
@@ -37,15 +54,7 @@ const BattleLanding = ({battle, players, player}) => {
         <>
             <h1>Battle Landing</h1>
             {battle.initiator === player.id ? (
-                <div>
-                    Battle expires in <CountdownTimer 
-                    expiration={battle.battleWaitExpirationTime}
-                    onComplete={() => abortBattle({
-                        battleId: battle.id,
-                        initiatorId: battle.initiator,
-                        opponent
-                    })} 
-                /> seconds</div>
+                <div>Battle expires in {countdown} seconds</div>
             ) : null}
         </>
     );

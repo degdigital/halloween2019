@@ -9,19 +9,18 @@ const App = () => {
     const [players, playersLoading, playersError] = getPlayers();
     const [gameIsActive, gameIsActiveLoading, gameIsActiveError] = getDbVal('gameIsActive');
     const [battles, battlesLoading, battlesError] = getDbVal('battles');
-    const [battleInvites, battleInvitesLoading, battleInvitesError] = getDbVal('battleInvites');
     const [
         gameIsAwaitingPlayers, 
         gameIsAwaitingPlayersLoading, 
         gameIsAwaitingPlayersError
     ] = getDbVal('gameIsAwaitingPlayers');
 
-    if (userLoading || playersLoading || gameIsActiveLoading || gameIsAwaitingPlayersLoading || battleInvitesLoading || battlesLoading) {
+    if (userLoading || playersLoading || gameIsActiveLoading || gameIsAwaitingPlayersLoading || battlesLoading) {
         return (
             <Loading />
         );
     }
-    if (userError || playersError || gameIsActiveError || gameIsAwaitingPlayersError || battleInvitesError || battlesError) {
+    if (userError || playersError || gameIsActiveError || gameIsAwaitingPlayersError || battlesError) {
         return (
             <Error />
         );
@@ -44,7 +43,7 @@ const App = () => {
         const propsToPushToAll = {
             player: getPlayer(players, user.uid),
             players,
-            battle: getBattleInvolvingPlayer(battles, battleInvites, user.uid),
+            battle: getBattleInvolvingPlayer(battles, user.uid),
             gameIsAwaitingPlayers
         };
         console.log(propsToPushToAll);

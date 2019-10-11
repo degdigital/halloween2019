@@ -1,14 +1,9 @@
 import React from 'react';
-// import firebase from '../config/firebase.js';
-// import { useObject } from 'react-firebase-hooks/database';
-// import { convertObjectToArray } from '../utils/objectUtils.js';
 import { makeMove } from '../services';
 import battleMoves from '../config/battleMoves';
 
 const Battle = ({battle, player, opponent}) => {
     
-    console.log(opponent);
-
     const playerMove = battle.moves[player.id];
     const opponentMove = battle.moves[opponent.id];
 

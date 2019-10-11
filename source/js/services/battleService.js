@@ -10,8 +10,6 @@ const engagePlayerInBattle = async (opponentId, playerId, isEngaging = true) => 
     await dbRef.update({
         [`players/${opponentId}/isBattling`]: isEngaging,
         [`players/${playerId}/isBattling`]: isEngaging,
-        [`battleInvites/${opponentId}`]: battleId,
-        [`battleInvites/${playerId}`]: battleId,
         [`battles/${battleId}`]: {
             id: battleId,
             battleInitiationTime: now,
@@ -26,17 +24,22 @@ const engagePlayerInBattle = async (opponentId, playerId, isEngaging = true) => 
                 [opponentId]: false,
                 [playerId]: false
             },
-            isCompleted: false
+            isCompleted: false,
+            isShowingResults: false
         }
     });
     return Promise.resolve(battleId);
 };
 
-const getBattleInvolvingPlayer = (battles = null, battleInvites = null, playerId = null) => {
-    if (!battles || !battleInvites || !playerId) {
+const getBattleInvolvingPlayer = (battles = null, playerId = null) => {
+    if (!battles || !playerId) {
         return null;
     }
-    return battles[battleInvites[playerId]] || null;
+    const battleId = Object.keys(battles).find(key => {
+        const battle = battles[key];
+        return battle.isCompleted === false || (battle.isCompleted === true && battle.isShowingResults === true) && Object.keys(battle.players).includes(playerId);
+    });
+    return battleId ? battles[battleId] : null;
 };
 
 const joinBattle = async (battleId, playerId, shouldJoin = true) => 
@@ -60,13 +63,15 @@ const abortBattle = async ({battleId = null, initiatorId = null, opponent = null
         opponentRemainingLives = gameConfig.lives.convertedZombie;
         opponentTeam = 'zombie';
     }
+    if (opponentRemainingLives === 0 && opponent.team === 'zombie') {
+        opponentTeam = 'dead';
+    }
     
     return dbRef.update({
-        [`/battleInvites/${initiatorId}`]: null,
-        [`/battleInvites/${opponent.id}`]: null,
         [`/battles/${battleId}/isCompleted`]: true,
         [`/battles/${battleId}/winner`]: initiatorId,
         [`/battles/${battleId}/completionTime`]: Date.now(),
+        [`/battles/${battleId}/isShowingResults`]: false,
         [`/players/${initiatorId}/isBattling`]: false,
         [`/players/${opponent.id}/isBattling`]: false,
         [`/players/${opponent.id}/lives`]: opponentRemainingLives,
@@ -78,11 +83,16 @@ const makeMove = (battleId, playerId, moveId) => db.ref(`battles/${battleId}/mov
     [playerId]: moveId
 });
 
+const endBattleResults = battleId => dbRef.update({
+    [`/battles/${battleId}/isShowingResults`]: false
+});
+
 export {
     engagePlayerInBattle,
     getBattleInvolvingPlayer,
     joinBattle,
     getOpponentObject,
     abortBattle,
+    endBattleResults,
     makeMove
 };

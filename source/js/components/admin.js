@@ -54,7 +54,6 @@ const Admin = () => {
         if (window.confirm(messages.startNewGame)) {
             setActionIsInProgress(true);
             const updates = {
-                ['/battleInvites']: null,
                 ['/battles']: null,
                 ['/gameIsAwaitingPlayers']: false
             };

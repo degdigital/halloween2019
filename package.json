@@ -41,6 +41,7 @@
         "react": "^16.9.0",
         "react-dom": "^16.9.0",
         "react-firebase-hooks": "^2.1.0",
+        "react-page-visibility": "^5.0.0",
         "react-router-dom": "^5.0.1",
         "systemjs": "^2.1.2"
     }
