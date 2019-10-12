@@ -5,7 +5,7 @@ import { processHookVals } from '../utils/dataUtils.js';
 
 const getUser = () => useAuthState(firebase.auth());
 
-const getPlayers = () => processHookVals(useObject(firebase.database().ref('players')));
+const getPlayers = () => processHookVals(useObject(firebase.database().ref('players').orderByChild('isPlaying').equalTo(true)));
 
 const getPlayer = (players, userId) => ({
     id: userId,

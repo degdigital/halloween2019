@@ -19,14 +19,16 @@ const BattleLanding = ({battle, players, player}) => {
     const [countdown, setCountdown] = useState(remainingTime);
 
     useInterval(() => {
-        if ((battle.initiator === player.id) && countdown > 0) {
+        if (countdown > 0) {
             setCountdown(countdown - 1);
         } else {
-            abortBattle({
-                battleId: battle.id,
-                initiatorId: battle.initiator,
-                opponent
-            })
+            if (battle.initiator === player.id) {
+                abortBattle({
+                    battleId: battle.id,
+                    initiatorId: battle.initiator,
+                    opponent
+                });
+            }
         }
     }, 1000);
 

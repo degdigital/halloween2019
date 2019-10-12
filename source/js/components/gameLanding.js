@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { joinGame } from '../services';
 import PlayerList from './playerList.js';
+import TeamStandings from './teamStandings.js';
 
 const GameLanding = ({
     history,
@@ -45,7 +46,8 @@ const GameLanding = ({
 
     return (
         <section>
-            <h1>Player Map</h1>
+            <h1>Player Map</h1><br />
+            <TeamStandings players={players} />
             {player.lives <= 0 ? (
                 <h2>You are dead. Watch the game, but no more playing!</h2>
             ) : null}

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { register } from '../../services/authService.js';
-import { Link } from 'react-router-dom';
 
 const Register = ({history}) => {
 

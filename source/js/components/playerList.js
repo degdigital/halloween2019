@@ -1,16 +1,17 @@
-import React from 'react';
-import { engagePlayerInBattle } from '../services/battleService.js';
+import React, { useState } from 'react';
+import PlayerInfoBubble from './playerInfoBubble.js';
 
 const PlayerList = ({history, player, players}) => {
 
-    const handleButtonClick = async (id) => {
-        await engagePlayerInBattle(id, player.id);
-        history.push(`/battle`);
+    const [showingId, setShowingId] = useState(null);
+
+    const handleShowClick = (idToShow = null) => {
+        setShowingId(showingId !== idToShow ? idToShow : null);
     };
 
     const filterDeadAndInactivePlayers = players => players.filter(player => player.lives > 0 && player.isPlaying === true);
 
-    const isDisabled = (opponentId, opponentTeam, isBattling) => {
+    const shouldBeDisabled = (opponentId, opponentTeam, isBattling) => {
         return !player || 
             opponentId === player.id || 
             isBattling === true || 
@@ -21,13 +22,23 @@ const PlayerList = ({history, player, players}) => {
     return players ? (
         <ul>
             {filterDeadAndInactivePlayers(players).map(({id, displayName, team, isBattling, lives}) => {
+                const isYou = player.id === id;
+                const isShowing = showingId === id;
                 return (
                     <li key={id}>
-                        <button 
-                            type="button" 
-                            disabled={isDisabled(id, team, isBattling)}
-                            onClick={() => handleButtonClick(id)}>{displayName}{player && player.id === id ? ' - You' : null} ({team}){isBattling ? ' - Battling' : ''}{lives ? ' - ' + lives + ' lives remaining' : null}
-                        </button>
+                        {displayName}{isYou ? ' (You)' : null} <button type="button" onClick={() => handleShowClick(id)}>{isShowing ? 'Hide' : 'Show'} Info</button>
+                        <PlayerInfoBubble 
+                            isYou={isYou}
+                            history={history}
+                            displayName={displayName}
+                            isBattling={isBattling}
+                            team={team}
+                            lives={lives}
+                            player={player}
+                            id={id}
+                            isShowing={isShowing} 
+                            isDisabled={shouldBeDisabled(id, team, isBattling)}
+                        /><br /><br />
                     </li>
                 )
             })}
